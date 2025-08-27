@@ -17,7 +17,7 @@ app.use(express.json())
 app.use('/', authRoutes);
 app.use('/', createRoute);
 
-const PORT = process.env.PORT || 8000;
+const PORT = process.env.PORT || 1000;
 
 app.listen(PORT, () => {
     console.log(`Listening on port ${PORT}`);
