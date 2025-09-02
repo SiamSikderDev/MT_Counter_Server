@@ -91,3 +91,35 @@ export const removeCard = async (req, res) => {
         console.log(e.message)
     }
 }
+
+export const changeCardCondition = async (req, res) => {
+    try {
+        const { cardId } = req.body;  // renamed for clarity
+
+        if (!cardId) {
+            return res.status(400).json({
+                success: false,
+                message: 'Card ID is required.'
+            });
+        }
+
+        const card = await Card.findById(cardId);
+
+        if (!card) {
+            return res.status(404).json({
+                success: false,
+                message: 'Card not found!'
+            });
+        }
+
+        card.condition = 'sell'
+        card.save();
+
+        return res.status(200).json({
+            success: true,
+            message: 'Successfully save to sells!'
+        })
+    } catch (e) {
+        console.log(e.message)
+    }
+}

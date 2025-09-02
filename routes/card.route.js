@@ -1,5 +1,5 @@
 import express from "express";
-import { createCard, getAllDues, getAllSells, removeCard } from "../controllers/card.controller.js";
+import { changeCardCondition, createCard, getAllDues, getAllSells, removeCard } from "../controllers/card.controller.js";
 
 const router = express.Router();
 
@@ -8,5 +8,6 @@ router
     .get('/getAllDues', getAllDues)
     .get('/getAllSells', getAllSells)
     .delete('/removeCard', removeCard)
+    .post('/changeCardCondition', changeCardCondition)
 
 export default router;
