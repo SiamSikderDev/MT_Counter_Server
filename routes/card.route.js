@@ -7,6 +7,6 @@ router
     .post('/create', createCard)
     .get('/getAllDues', getAllDues)
     .get('/getAllSells', getAllSells)
-    .get('/removeCard', removeCard)
+    .delete('/removeCard', removeCard)
 
 export default router;
