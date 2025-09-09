@@ -1,6 +1,7 @@
 import { User } from "../models/user.model.js";
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken'
+import { generateOTP } from "../utils/generateOTP.js";
 
 export const signup = async (req, res) => {
     try {
@@ -27,6 +28,11 @@ export const signup = async (req, res) => {
             password: hashedPassword
         })
 
+        // send otp
+        const otp = generateOTP();
+        user.otp = otp;
+        await user.save();
+
         const userData = {
             id: user._id,
             username: user.username,
@@ -52,6 +58,31 @@ export const signup = async (req, res) => {
     }
 }
 
+export const verifyOtp = async (req, res) => {
+  try {
+    const { email, otp } = req.body;
+
+    const user = await User.findOne({ email });
+
+    if (!user || user.otp !== otp) {
+      return res.status(400).json({ success: false, message: "Invalid or expired OTP!" });
+    }
+
+    // OTP valid হলে reset করে দাও
+    user.otp = null;
+    user.otpExpire = null;
+    await user.save();
+
+    return res.status(200).json({
+      success: true,
+      message: "OTP verified successfully!"
+    });
+  } catch (err) {
+    console.error(err.message);
+    return res.status(500).json({ success: false, message: "Server error!" });
+  }
+};
+
 export const login = async (req, res) => {
     try {
         const { usernameOrEmail, password } = req.body;
@@ -74,6 +105,13 @@ export const login = async (req, res) => {
         if (!user) return res.status(404).json({
             success: false,
             message: 'User not exists!'
+        })
+
+        const matchPassword = await bcrypt.compare(password, user.password);
+
+        if (!matchPassword) return res.status(400).json({
+            success: false,
+            message: 'Password is incorrect!'
         })
 
         const userData = {
