@@ -2,6 +2,7 @@ import { User } from "../models/user.model.js";
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken'
 import { generateOTP } from "../utils/generateOTP.js";
+import { sendEmail } from "../utils/sendEmail.js";
 
 export const signup = async (req, res) => {
     try {
@@ -32,6 +33,8 @@ export const signup = async (req, res) => {
         const otp = generateOTP();
         user.otp = otp;
         await user.save();
+
+        await sendEmail(user.email, "Your OTP Code", `Your OTP is ${otp}`)
 
         const userData = {
             id: user._id,
