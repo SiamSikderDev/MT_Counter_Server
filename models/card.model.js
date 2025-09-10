@@ -34,6 +34,6 @@ const cardSchema = mongoose.Schema({
         default: "due",
         required: true
     },
-})
+}, { timestamps: true })
 
 export const Card = mongoose.model('Card', cardSchema);
