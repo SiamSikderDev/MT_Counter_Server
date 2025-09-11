@@ -35,7 +35,7 @@ export const createCard = async (req, res) => {
 
 export const getAllDues = async (req, res) => {
     try {
-        const accounts = await Card.find({ condition: 'due' });
+        const accounts = await Card.find({ condition: 'due' }).sort({ createdAt: -1 });
 
         res.status(200).json({
             success: true,
@@ -50,7 +50,7 @@ export const getAllDues = async (req, res) => {
 
 export const getAllSells = async (req, res) => {
     try {
-        const accounts = await Card.find({ condition: 'sell' });
+        const accounts = await Card.find({ condition: 'sell' }).sort({ createdAt: -1 });
 
         res.status(200).json({
             success: true,
